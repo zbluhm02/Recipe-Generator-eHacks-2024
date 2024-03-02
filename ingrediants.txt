@@ -1,0 +1,3 @@
+Flour 1 6 dry
+Egg 3 8 wet
+Sugar 1 5 dry
