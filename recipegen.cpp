@@ -169,9 +169,25 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
         foodfile >> input;
     }
 
-    rannum = rand() % iSize;
-    string in1 = iarr[rannum];
-    cout << in1 << endl;
+    // Each Catagorie has a min and max on the number of ingrediants it can pull.
+    int dMin = 2;
+    int dMax = 5;
+    int eMin = 4;
+    int eMax = 12;
+    int aMin = 1;
+    int aMax = 3;
 
+    for(int i = (rand() % (dMax - dMin + 1) + dMin); i > 0; i--) {
+        rannum = rand() % iSize;
+        string in1 = iarr[rannum];
+        cout << in1 << endl;
+    }
+
+    //test hashmap
+    string intest = "Sugar";
+
+    ingrediant ingtest = list[intest];
+
+    cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
 
 }
