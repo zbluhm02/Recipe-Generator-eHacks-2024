@@ -10,5 +10,5 @@ pepper
 garlic
 bell_pepper
 worcestershire_sauce
-Green Onions
-tomato paste
+Green_Onions
+tomato_paste
