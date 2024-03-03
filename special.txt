@@ -1,10 +1,10 @@
 Asuka 21 30 hugs ;
 Mai 2 6 kisses ;
 Cockroach 2 3 Bucketfull  ;
-Anime_Girl_Juice 1 5 liters ;
 Spicy_Purple_Potatoes 20 30 pounds ;
 Computer_Hardware_Components 18 30 teraflops ;
 Servo_Motors 18 20 torque ;
 Corn  1 2.75689 cups ;
 Misato 22 69 waves  ;
-century_egg 1 1 ;
+Century_egg 1 1 unit;
+Wood 1 64 planks;
