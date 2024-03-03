@@ -7,3 +7,4 @@ Computer_Hardware_Components 18 30 teraflops ;
 Servo_Motors 18 20 torque ;
 Corn  1 2.75689 cups ;
 Misato 22 69 waves  ;
+century_egg 1 1 ;
