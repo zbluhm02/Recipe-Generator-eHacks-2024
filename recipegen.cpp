@@ -93,8 +93,8 @@ void openFile(ifstream &inFile, string filename){
     if (inFile.is_open()){
         //cout << "Opened File" << endl;
     } else {
-        cout << "No Open File" << endl;
-        exit(-1);
+     //   cout << "No Open File" << endl;
+     //   exit(-1);
     }
 }
 
@@ -205,25 +205,28 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
         rannum = 0; // REMOVE THIS
         food = entree[rannum];
     } else if (cat == 3) {
+        // Never used Depreciated
         rannum = rand() % aSize;
         food = appetizer[rannum];
+        
     }
     // Print food
     string food2 = food;
     // Create stringName to Open
+    int iSize = 0;
+    string iarr[100];
+    if(cat != 3) {
     food +=".txt";
     openFile(foodfile,food);
 
     // Init ingrediant arr from 'food'.txt
-    int iSize = 0;
-    string iarr[100];
     foodfile >> input;
     while(!foodfile.eof()) {
         iarr[iSize] = input;
         iSize++;
         foodfile >> input;
     }
-
+    }
     // Each Catagory has a min and max on the number of ingrediants it can pull.
     int dMin = 4;
     int dMax = 6;
@@ -331,8 +334,15 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     }
     // Appetizer Output
     if (cat == 3) {
-
-    }
+        cout << "\n1. Gather and Prepare: ";
+        
+        cout << stream.str();
+        cout << " to get started making "<< foodName <<"\n";
+        cout <<"\n2. Make sure to mix in " << in2 << " with the " << foodName << " and cover in " << rand() % 8 + 2 << " cups of batter or flour\n";
+        cout << "\n3. Heat up a pot of " << rand() % 12 + 2 << " ml of oil to " << rand() % 150 + 75 << ", once heated take battered appetizer and drop in oil for " << rand() % 30 + 5 << " minutes unil cooked\n";
+        cout << "After the " <<  foodName << " has been cooked in oil pull out, dry off, season up, and allow to cool for " << rand() % 20 + 3 << " minutes before serving.\n";    
+      }
+    
 
 
 
