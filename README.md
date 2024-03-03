@@ -10,3 +10,6 @@ For users you want to create their own random foods, Follow the format in the Fi
 # Input File Format
 "Ingrediant_Name" "minVal" "maxVal" "unit of measure" "tag1" tag2" ... ";" ALL Ingrediant list must end with ;
 Steak.txt and Cake.txt have a list of potential ingrediants that the program will choose from to create the recipe.
+# Output
+The program grabs a random number of ingrediants and a random quantity of them and outputs them.
+The program always choose one ingrediant from special.txt to add to the recipe.
