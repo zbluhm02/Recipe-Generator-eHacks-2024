@@ -3,7 +3,7 @@ Cake
 cookies
 brownies
 cupcakes
-jiggy figgy pudding
+jiggy_figgy_pudding
 Entree
 Steak
 spaghetti
