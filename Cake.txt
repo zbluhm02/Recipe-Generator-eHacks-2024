@@ -4,3 +4,5 @@ Flour
 Vanilla_Extract
 Icing
 Baking_Powder
+chocolate_chips
+chocolate
