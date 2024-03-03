@@ -1,3 +1,4 @@
 # Recipe-Generator-eHacks-2024
-Our team consists of Dalton, Zach, and Jakob.
-Our goal is to create a recipe generator that generates semi-realistic recipes that can actually be followed.
+# Team Syntax Samurai
+The recipegen.cpp program givin the appropriate input files will generate a random recipe output to std out. 
+This uses the C++ rand() function.
