@@ -35,10 +35,12 @@ string * desert;
 string * appetizer;
 string * entree;
 string * special;
-int dSize;
-int aSize;
-int eSize;
-int sSize;
+string * resetL;
+int dSize; // Desert Size
+int aSize; // Appetizer Size
+int eSize; // Entree Size
+int sSize; // SpecialSIze
+int rSize; // resetL size
 
 unordered_map<string, ingrediant> list;
 unordered_map<string, ingrediant> listSpecial;
@@ -53,6 +55,8 @@ int main(int argv, char* argc[]) {
     eSize = 0;
     special = new string[100];
     sSize = 0;
+    resetL = new string[20];
+    rSize = 0;
     ifstream inFile;
     openFile(inFile, "cat.txt");
     initarr(inFile);
@@ -62,7 +66,23 @@ int main(int argv, char* argc[]) {
     initList("special.txt", listSpecial, true); // Init list from txt file
     // cout << "list initialized" << endl;
 
-    selectf(1);
+    // Allow User to Select Which Category
+    cout << "=========Welcome to Trash Taste Recipies=========\n";
+    cout << "Enter 1 for Deserts, 2 for Entrees, and 3 for Appetizers. Enter l for exiting: ";
+    char input;
+    cin >> input;
+
+    while(input != 'l') {
+        if(input == '1') {
+            selectf(1);
+        } else if(input == '2') {
+            selectf(2);
+        } else if(input == '3') {
+            selectf(3);
+        }
+        cout << "Enter next Request Please: ";
+        cin >> input;
+    }
 
     return 0;
 }
@@ -220,6 +240,9 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
             list[in1].isUsed = true;
             ingrediant ingtest = list[in1];
             cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
+            // Add item to used array to reset later
+            resetL[rSize] = in1;
+            rSize++;
             i--;
         }
     }
@@ -230,21 +253,14 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     string in2 = special[rannum];
     ingrediant ingtest = listSpecial[in2];
     cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
-    /*
-    //test hashmap
-    string intest = "Sugar";
 
-    ingrediant ingtest = list[intest];
-    if(ingtest.isDry) {
-        cout << "Sugar is dry\n";
-    }
-    if (ingtest.isWet) {
-        cout << "Sugar is wet\n";
-    }
-    cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
-    */
 
-   
+
+    // Reset L
+    for(int i = 0; i < rSize; i++) {
+        list[resetL[i]].isUsed = false;
+    }
+    rSize = 0;
 }
 
 void loadSpecial(string addSpecial) {
