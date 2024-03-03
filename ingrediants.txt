@@ -17,5 +17,5 @@ pepper 1 6 teaspoon ;
 garlic 1 4 cloves ;
 bell_pepper 1 7 slices ;
 worcestershire_sauce 1 2 cup ;
-Green Onions 1 4 ;
-tomato paste 4 7 tablespoons ;
+Green_Onions 1 4 ;
+tomato_paste 4 7 tablespoons ;
