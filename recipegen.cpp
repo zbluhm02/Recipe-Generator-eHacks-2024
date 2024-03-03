@@ -48,6 +48,12 @@ unordered_map<string, ingrediant> list;
 unordered_map<string, ingrediant> listSpecial;
 
 int main(int argv, char* argc[]) {
+    
+    if(argv < 1) {
+        cerr << "Improper Usage. Expected a 1 for Dessert, 2 for Entree, or 3 for Appetizer\n";
+    }
+    
+
     // The worst way to do things
     sleep(2);
     srand (time(NULL));
@@ -89,7 +95,8 @@ int main(int argv, char* argc[]) {
         cin >> input;
     }
     */
-    selectf(3); // Function that does it all and how we generated txt files
+    selectf(stoi(argv[argc - 1])); // Function that does it all and how we generated txt files CLI
+   // selectf(3);
     return 0;
 }
 
