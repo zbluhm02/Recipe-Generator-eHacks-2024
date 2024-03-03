@@ -1,3 +1,7 @@
-Flour 1 6 dry
-Egg 3 8 wet
-Sugar 1 5 dry
+Flour 1 6 dry ;
+Egg 3 8 wet ;
+Sugar 1 5 dry ;
+Vanilla_Extract 2 4 wet ;
+Icing 1 2 dry ;
+Baking_Powder 2 2 dry ;
+Cockroach 1 2 dry ;

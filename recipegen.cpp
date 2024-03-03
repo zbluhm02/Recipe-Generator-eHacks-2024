@@ -16,27 +16,32 @@ using namespace std;
 
 struct ingrediant {
     string name;
+    string unit;
     int min;
     int max;
+    bool isUsed;
     bool isWet;
     bool isDry;
-    string tags;
 };
 
-void openFile(ifstream &inFile, string filename);
-void initarr(ifstream &inFile);
-void print_input(int cat);
-void initList();
-void selectf(int cat);
+void openFile(ifstream &inFile, string filename); // Open file. Exit if not found
+void initarr(ifstream &inFile); // Input data into desert[], appetizer[], entree[]
+void print_input(int cat); // Depreicated
+void initList(string fname, unordered_map<string, ingrediant> &test1, bool isSpecial); // Input data into unordered map
+void selectf(int cat); // Select a food from a category and randomly select ingrediants. Grab data from list
+void loadSpecial(string addSpecial);
 
 string * desert;
 string * appetizer;
 string * entree;
+string * special;
 int dSize;
 int aSize;
 int eSize;
-unordered_map<string, ingrediant> list;
+int sSize;
 
+unordered_map<string, ingrediant> list;
+unordered_map<string, ingrediant> listSpecial;
 
 int main(int argv, char* argc[]) {
     srand (time(NULL));
@@ -46,13 +51,16 @@ int main(int argv, char* argc[]) {
     aSize = 0;
     entree = new string[100];
     eSize = 0;
+    special = new string[100];
+    sSize = 0;
     ifstream inFile;
     openFile(inFile, "cat.txt");
     initarr(inFile);
-    print_input(stoi(argc[argv - 1]));
+    // print_input(stoi(argc[argv - 1]));
 
-    initList();
-    cout << "list initialized" << endl;
+    initList("ingrediants.txt", list, false); // Init list from txt file
+    initList("special.txt", listSpecial, true); // Init list from txt file
+    // cout << "list initialized" << endl;
 
     selectf(1);
 
@@ -114,25 +122,43 @@ void print_input(int cat) {
     }
 }
 
-void initList() {
+void initList(string fname, unordered_map<string, ingrediant> &test1, bool isSpecial) {
     string input;
     int min;
     int max;
     string tag;
     ifstream inFile;
 
-    openFile(inFile, "ingrediants.txt");
+    openFile(inFile, fname);
     inFile >> input;
     while(!inFile.eof()) {
+        string foodReal = input;
         ingrediant ingred;
+        for(int i = 0; i <input.size(); i++) {
+            if(input.at(i) == '_') {
+                input.at(i) = ' ';
+            }
+        }
         ingred.name = input;
         inFile >> min;
         inFile >> max;
-        inFile >> tag;
-        ingred.tags = tag;
         ingred.min = min;
         ingred.max = max;
-        list[ingred.name] = ingred;
+        ingred.isUsed = false;
+        inFile >> tag;
+
+        while(tag != ";") {
+            if (tag == "dry") {
+                ingred.isDry = true;
+            } else if(tag == "wet") {
+                ingred.isWet = true;
+            }
+            inFile >> tag;
+        }
+        if(isSpecial) {
+            loadSpecial(foodReal);
+        }
+        test1[foodReal] = ingred;
 
         inFile >> input;
     }
@@ -146,7 +172,7 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     if(cat == 1) {
         rannum = rand() % dSize;
         // Debug Code
-        rannum = 0;
+        rannum = 0; // REMOVE THIS
         food = desert[rannum];
     } else if(cat == 2) {
         rannum = rand() % eSize;
@@ -155,9 +181,11 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
         rannum = rand() % aSize;
         food = appetizer[rannum];
     }
+    // Print food
+    cout << food << " Recipe:\n";
+    // Create stringName to Open
     food +=".txt";
     openFile(foodfile,food);
-
 
     // Init ingrediant arr from 'food'.txt
     int iSize = 0;
@@ -169,7 +197,7 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
         foodfile >> input;
     }
 
-    // Each Catagorie has a min and max on the number of ingrediants it can pull.
+    // Each Catagory has a min and max on the number of ingrediants it can pull.
     int dMin = 2;
     int dMax = 5;
     int eMin = 4;
@@ -177,17 +205,50 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     int aMin = 1;
     int aMax = 3;
 
-    for(int i = (rand() % (dMax - dMin + 1) + dMin); i > 0; i--) {
+    int sMin = 2; // Special ingrediants
+    int sMax = 2;
+
+    // Regular Ingrediants
+    int i = (rand() % (dMax - dMin + 1) + dMin);
+    while(i > 0) {
         rannum = rand() % iSize;
         string in1 = iarr[rannum];
-        cout << in1 << endl;
+       // cout << in1 << " ";
+       // Check to see if it is used
+        if(list[in1].isUsed) {
+        } else {
+            list[in1].isUsed = true;
+            ingrediant ingtest = list[in1];
+            cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
+            i--;
+        }
     }
 
+    // Special Ingrediants
+
+    rannum = rand() % sSize;
+    string in2 = special[rannum];
+    ingrediant ingtest = listSpecial[in2];
+    cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
+    /*
     //test hashmap
     string intest = "Sugar";
 
     ingrediant ingtest = list[intest];
-
+    if(ingtest.isDry) {
+        cout << "Sugar is dry\n";
+    }
+    if (ingtest.isWet) {
+        cout << "Sugar is wet\n";
+    }
     cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
+    */
 
+   
+}
+
+void loadSpecial(string addSpecial) {
+    special[sSize] = addSpecial;
+    sSize++;
+    return;
 }
