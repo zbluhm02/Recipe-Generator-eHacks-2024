@@ -2,9 +2,10 @@
 Team: Syntax Samurai
 Dalton Weiland, Jakob Clark, Zachary Bluhm
 03/2/24
-Trash Taste
+Trash Taste Recipe
 */
 
+#include <unistd.h>
 #include <iostream>
 #include <string>
 #include <unordered_map>
@@ -15,7 +16,7 @@ Trash Taste
 
 using namespace std;
 
-struct ingrediant {
+struct ingrediant { // Create class to use for map and store ingrediants. isWet and isDry have zero functionality
     string name;
     string unit;
     int min;
@@ -30,7 +31,7 @@ void initarr(ifstream &inFile); // Input data into desert[], appetizer[], entree
 void print_input(int cat); // Depreicated
 void initList(string fname, unordered_map<string, ingrediant> &test1, bool isSpecial); // Input data into unordered map
 void selectf(int cat); // Select a food from a category and randomly select ingrediants. Grab data from list
-void loadSpecial(string addSpecial);
+void loadSpecial(string addSpecial); // Init special ingrediants
 
 string * desert;
 string * appetizer;
@@ -47,6 +48,8 @@ unordered_map<string, ingrediant> list;
 unordered_map<string, ingrediant> listSpecial;
 
 int main(int argv, char* argc[]) {
+    // The worst way to do things
+    sleep(2);
     srand (time(NULL));
     desert = new string[100];
     dSize = 0;
@@ -61,15 +64,16 @@ int main(int argv, char* argc[]) {
     ifstream inFile;
     openFile(inFile, "cat.txt");
     initarr(inFile);
-    // print_input(stoi(argc[argv - 1]));
+    // Gets Better from here
 
     initList("ingrediants.txt", list, false); // Init list from txt file
     initList("special.txt", listSpecial, true); // Init list from txt file
-    // cout << "list initialized" << endl;
 
-    // Allow User to Select Which Category
+    /*
+     Allow User to Select Which Category
     cout << "=========Welcome to Trash Taste Recipies=========\n";
     cout << "Enter 1 for Deserts, 2 for Entrees, and 3 for Appetizers. Enter l for exiting: ";
+    
     char input;
     cin >> input;
 
@@ -84,7 +88,8 @@ int main(int argv, char* argc[]) {
         cout << "Enter your next request please: ";
         cin >> input;
     }
-
+    */
+    selectf(3); // Function that does it all and how we generated txt files
     return 0;
 }
 
@@ -93,8 +98,8 @@ void openFile(ifstream &inFile, string filename){
     if (inFile.is_open()){
         //cout << "Opened File" << endl;
     } else {
-     //   cout << "No Open File" << endl;
-     //   exit(-1);
+        cout << "No Open File Named: " << filename << endl;
+        exit(-1);
     }
 }
 
@@ -103,7 +108,7 @@ void initarr(ifstream &inFile){
     int cat;
     inFile >> input;
     while(!inFile.eof()) {
-        if(input == "Desert") {
+        if(input == "Dessert") {
           //  printf("Desert found\n");
             cat = 1;
         } else if (input == "Appetizer") {
@@ -196,16 +201,11 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     stringstream stream;
     if(cat == 1) {
         rannum = rand() % dSize;
-        // Debug Code
-        rannum = 0; // REMOVE THIS
         food = desert[rannum];
     } else if(cat == 2) {
         rannum = rand() % eSize;
-        // DEBUG CODE
-        rannum = 0; // REMOVE THIS
         food = entree[rannum];
     } else if (cat == 3) {
-        // Never used Depreciated
         rannum = rand() % aSize;
         food = appetizer[rannum];
         
@@ -215,17 +215,20 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     // Create stringName to Open
     int iSize = 0;
     string iarr[100];
+    if(cat == 1) {
+        food = "Cake.txt";
+    } else if (cat == 2) {
+        food ="Steak.txt";
+    }
     if(cat != 3) {
-    food +=".txt";
     openFile(foodfile,food);
-
+    }
     // Init ingrediant arr from 'food'.txt
     foodfile >> input;
     while(!foodfile.eof()) {
         iarr[iSize] = input;
         iSize++;
         foodfile >> input;
-    }
     }
     // Each Catagory has a min and max on the number of ingrediants it can pull.
     int dMin = 4;
@@ -251,9 +254,15 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
             food3.at(i) = ' ';
         }
     }
-    string foodName = in2 + " " + food3;
+    string in3 = in2;
+    for(int i = 0; i < in3.length(); i++) {
+        if(in3.at(i) == '_') {
+            in3.at(i) = ' ';
+        }
+    }
+    string foodName = in3 + " " + food3;
 
-    cout << foodName << " Recipe:\n";
+    cout <<"<h1>" << foodName << " Recipe:</h1>\n";
     // Regular Ingrediants
     int i = (rand() % (dMax - dMin + 1) + dMin);
     int i2 = i / 2;
@@ -261,7 +270,7 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     // Desert Ouput
     if(cat == 1){
         // Format for Desert
-        cout << "Step 1. Add ";
+        cout << "<p>Step 1. Add ";
         while(i > i2) {
             rannum = rand() % iSize;
             string in1 = iarr[rannum];
@@ -280,7 +289,7 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
         }
         // Desert Format Cont.
         cout << "to a large bowl or the bowl of a stand mixer. Whisk through to combine or, using your paddle attachment, stir through flour mixture until combined well.\n";
-        cout << "\n2. Add ";
+        cout << "</p>\n<p>2. Add ";
         while(i2 > 0) {
             rannum = rand() % iSize;
             string in1 = iarr[rannum];
@@ -298,14 +307,14 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
             }
         }
         cout << stream.str();
-        cout << "mixture and mix together on medium speed until well combined. Reduce speed and carefully add boiling water to the " << foodName <<" batter until well combined.\n";
+        cout << " mixture and mix together on medium speed until well combined. Reduce speed and carefully add boiling water to the " << foodName <<" batter until well combined.\n";
         stream.clear();
-        cout << "\nDistribute " << foodName << " batter evenly between the two prepared " << foodName << " pans. Bake for " << (rand()% 30) + 25 <<  " minutes.\n";
-        cout << "\n4. Remove from the oven and allow to cool for about " << (rand()% 10) + 5 << " minutes, remove from the pan and cool completely.\n";
+        cout << "</p>\n<p>3. Distribute " << foodName << " batter evenly between the two prepared " << foodName << " pans. Bake for " << (rand()% 30) + 25 <<  " minutes.\n";
+        cout << "</p>\n<p>4. Remove from the oven and allow to cool for about " << (rand()% 10) + 5 << " minutes, remove from the pan and cool completely.</p>\n";
     }
     // Entree Output
     if(cat == 2) {
-        cout << "\n1. Prepare: ";
+        cout << "\n<p>1. Prepare: ";
         stringstream foodlist;
         int i = (rand() % (dMax - dMin + 1) + dMin);
         while(i > 0) {
@@ -326,28 +335,28 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
                 }
             }
             cout << stream.str();
-            cout << " ahead of time.\n";
-            cout <<"\n2. Add " << foodlist.str() << in2 << " and let sit for " << rand() % 20 << " minutes to flavor" << endl;
-            cout << "\n3. Toss oil and heat pan to high heat.\n";
-            cout << "\n4. Sear " << foodlist.str() << " and " << in2 << " in pan for " << rand() % 14 << " minutes until cooked appropriatley\n";
-            cout << "\n5. Season the prepared meal and plate, allow " << rand() % 50 << " minutes to cool before serving.\n";
+            cout << " ahead of time.</p>\n";
+            cout <<"\n<p>2. Add " << foodlist.str() << in3 << " and let sit for " << rand() % 20 << " minutes to flavor.</p>" << endl;
+            cout << "\n<p>3. Toss oil and heat pan to high heat.</p>\n";
+            cout << "\n<p>4. Sear " << foodlist.str() << " and " << in3 << " in pan for " << rand() % 14 << " minutes until cooked appropriatley.</p>\n";
+            cout << "\n<p>5. Season the prepared meal and plate, allow " << rand() % 50 << " minutes to cool before serving.</p>\n";
     }
     // Appetizer Output
     if (cat == 3) {
-        cout << "\n1. Gather and Prepare: ";
+        cout << "\n<p>1. Gather and Prepare: ";
         
         cout << stream.str();
-        cout << " to get started making "<< foodName <<"\n";
-        cout <<"\n2. Make sure to mix in " << in2 << " with the " << foodName << " and cover in " << rand() % 8 + 2 << " cups of batter or flour\n";
-        cout << "\n3. Heat up a pot of " << rand() % 12 + 2 << " ml of oil to " << rand() % 150 + 75 << ", once heated take battered appetizer and drop in oil for " << rand() % 30 + 5 << " minutes unil cooked\n";
-        cout << "After the " <<  foodName << " has been cooked in oil pull out, dry off, season up, and allow to cool for " << rand() % 20 + 3 << " minutes before serving.\n";    
+        cout << " to get started making "<< foodName <<".</p>\n";
+        cout <<"\n<p>2. Make sure to mix in " << in3 << " with the " << foodName << " and cover in " << rand() % 8 + 2 << " cups of batter or flour.</p>\n";
+        cout << "\n<p>3. Heat up a pot of " << rand() % 12 + 2 << " ml of oil to " << rand() % 150 + 75 << ", once heated take battered appetizer and drop in oil for " << rand() % 30 + 5 << " minutes unil cooked.</p>\n";
+        cout << "\n<p>4. After the " <<  foodName << " has been cooked in oil pull out, dry off, season up, and allow to cool for " << rand() % 20 + 3 << " minutes before serving.</p>\n";    
       }
     
 
 
 
     // Generic Output
-    cout <<"\nEnjoy your fresh " << foodName << "!(Serves " << rand() % 9 + 4 << " people)\n\n";
+    cout <<"\n<h3>Enjoy your fresh " << foodName << "!(Serves " << rand() % 9 + 4 << " people)</h3>\n\n";
 
     // Reset L
     for(int i = 0; i < rSize; i++) {

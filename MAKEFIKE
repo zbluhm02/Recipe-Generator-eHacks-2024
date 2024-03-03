@@ -1,0 +1,2 @@
+all:
+g++ -i recipegen.cpp -o recipegen
