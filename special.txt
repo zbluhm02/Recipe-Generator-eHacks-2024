@@ -1,4 +1,9 @@
-Asuka 21 30 wet ;
-Mai 2 2 wet ;
-Mom 2 4 wet ;
-Cockroach 2 3 dry ;
+Asuka 21 30 hugs ;
+Mai 2 6 kisses ;
+Cockroach 2 3 Bucketfull  ;
+Anime_Girl_Juice 1 5 liters ;
+Spicy_Purple_Potatoes 20 30 pounds ;
+Computer_Hardware_Components 18 30 teraflops ;
+Servo_Motors 18 20 torque ;
+Corn  1 2.75689 cups ;
+Misato 22 69 waves  ;

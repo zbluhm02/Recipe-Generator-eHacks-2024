@@ -11,6 +11,7 @@ Trash Taste
 #include <fstream>
 #include <time.h>
 #include <stdlib.h>
+#include <sstream>
 
 using namespace std;
 
@@ -80,7 +81,7 @@ int main(int argv, char* argc[]) {
         } else if(input == '3') {
             selectf(3);
         }
-        cout << "Enter next Request Please: ";
+        cout << "Enter your next request please: ";
         cin >> input;
     }
 
@@ -144,6 +145,7 @@ void print_input(int cat) {
 
 void initList(string fname, unordered_map<string, ingrediant> &test1, bool isSpecial) {
     string input;
+    string unit;
     int min;
     int max;
     string tag;
@@ -165,6 +167,8 @@ void initList(string fname, unordered_map<string, ingrediant> &test1, bool isSpe
         ingred.min = min;
         ingred.max = max;
         ingred.isUsed = false;
+        inFile >> unit;
+        ingred.unit = unit;
         inFile >> tag;
 
         while(tag != ";") {
@@ -189,6 +193,7 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     string food;
     string input;
     ifstream foodfile;
+    stringstream stream;
     if(cat == 1) {
         rannum = rand() % dSize;
         // Debug Code
@@ -196,13 +201,15 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
         food = desert[rannum];
     } else if(cat == 2) {
         rannum = rand() % eSize;
+        // DEBUG CODE
+        rannum = 0; // REMOVE THIS
         food = entree[rannum];
     } else if (cat == 3) {
         rannum = rand() % aSize;
         food = appetizer[rannum];
     }
     // Print food
-    cout << food << " Recipe:\n";
+    string food2 = food;
     // Create stringName to Open
     food +=".txt";
     openFile(foodfile,food);
@@ -218,43 +225,119 @@ void selectf(int cat) { // 1 Desert, 2 Entree, 3 Appetizer
     }
 
     // Each Catagory has a min and max on the number of ingrediants it can pull.
-    int dMin = 2;
-    int dMax = 5;
-    int eMin = 4;
-    int eMax = 12;
+    int dMin = 4;
+    int dMax = 6;
+    int eMin = 3;
+    int eMax = 6;
     int aMin = 1;
     int aMax = 3;
 
     int sMin = 2; // Special ingrediants
     int sMax = 2;
 
-    // Regular Ingrediants
-    int i = (rand() % (dMax - dMin + 1) + dMin);
-    while(i > 0) {
-        rannum = rand() % iSize;
-        string in1 = iarr[rannum];
-       // cout << in1 << " ";
-       // Check to see if it is used
-        if(list[in1].isUsed) {
-        } else {
-            list[in1].isUsed = true;
-            ingrediant ingtest = list[in1];
-            cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
-            // Add item to used array to reset later
-            resetL[rSize] = in1;
-            rSize++;
-            i--;
-        }
-    }
-
-    // Special Ingrediants
+     // Special Ingrediants
 
     rannum = rand() % sSize;
     string in2 = special[rannum];
     ingrediant ingtest = listSpecial[in2];
-    cout << "Add " << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " <unit> of " << ingtest.name << endl;
+    stream << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " " << ingtest.unit <<" of " << ingtest.name;
+
+    string food3 = food2;
+    for(int i = 0; i < food3.length(); i++) {
+        if(food3.at(i) == '_') {
+            food3.at(i) = ' ';
+        }
+    }
+    string foodName = in2 + " " + food3;
+
+    cout << foodName << " Recipe:\n";
+    // Regular Ingrediants
+    int i = (rand() % (dMax - dMin + 1) + dMin);
+    int i2 = i / 2;
+
+    // Desert Ouput
+    if(cat == 1){
+        // Format for Desert
+        cout << "Step 1. Add ";
+        while(i > i2) {
+            rannum = rand() % iSize;
+            string in1 = iarr[rannum];
+        // cout << in1 << " ";
+        // Check to see if it is used
+            if(list[in1].isUsed) {
+            } else {
+                list[in1].isUsed = true;
+                ingrediant ingtest = list[in1];
+                cout << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " " << ingtest.unit << " of " << ingtest.name <<", ";
+                // Add item to used array to reset later
+                resetL[rSize] = in1;
+                rSize++;
+                i--;
+            }
+        }
+        // Desert Format Cont.
+        cout << "to a large bowl or the bowl of a stand mixer. Whisk through to combine or, using your paddle attachment, stir through flour mixture until combined well.\n";
+        cout << "\n2. Add ";
+        while(i2 > 0) {
+            rannum = rand() % iSize;
+            string in1 = iarr[rannum];
+        // cout << in1 << " ";
+        // Check to see if it is used
+            if(list[in1].isUsed) {
+            } else {
+                list[in1].isUsed = true;
+                ingrediant ingtest = list[in1];
+                cout << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " " << ingtest.unit << " of " << ingtest.name << ", ";
+                // Add item to used array to reset later
+                resetL[rSize] = in1;
+                rSize++;
+                i2--;
+            }
+        }
+        cout << stream.str();
+        cout << "mixture and mix together on medium speed until well combined. Reduce speed and carefully add boiling water to the " << foodName <<" batter until well combined.\n";
+        stream.clear();
+        cout << "\nDistribute " << foodName << " batter evenly between the two prepared " << foodName << " pans. Bake for " << (rand()% 30) + 25 <<  " minutes.\n";
+        cout << "\n4. Remove from the oven and allow to cool for about " << (rand()% 10) + 5 << " minutes, remove from the pan and cool completely.\n";
+    }
+    // Entree Output
+    if(cat == 2) {
+        cout << "\n1. Prepare: ";
+        stringstream foodlist;
+        int i = (rand() % (dMax - dMin + 1) + dMin);
+        while(i > 0) {
+            rannum = rand() % iSize;
+            string in1 = iarr[rannum];
+            // cout << in1 << " ";
+            // Check to see if it is used
+            if(list[in1].isUsed) {
+            } else {
+                list[in1].isUsed = true;
+                ingrediant ingtest = list[in1];
+                cout << (rand() % (ingtest.max - ingtest.min + 1) + ingtest.min) << " " << ingtest.unit << " of " << ingtest.name <<", ";
+                // Add item to used array to reset later
+                foodlist << ingtest.name << ", ";
+                resetL[rSize] = in1;
+                rSize++;
+                i--;
+                }
+            }
+            cout << stream.str();
+            cout << " ahead of time.\n";
+            cout <<"\n2. Add " << foodlist.str() << in2 << " and let sit for " << rand() % 20 << " minutes to flavor" << endl;
+            cout << "\n3. Toss oil and heat pan to high heat.\n";
+            cout << "\n4. Sear " << foodlist.str() << " and " << in2 << " in pan for " << rand() % 14 << " minutes until cooked appropriatley\n";
+            cout << "\n5. Season the prepared meal and plate, allow " << rand() % 50 << " minutes to cool before serving.\n";
+    }
+    // Appetizer Output
+    if (cat == 3) {
+
+    }
 
 
+
+    // Generic Output
+    cout <<"\nEnjoy your fresh " << foodName << "!(Serves " << rand() % 9 + 4 << " people)\n\n";
 
     // Reset L
     for(int i = 0; i < rSize; i++) {
