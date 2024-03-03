@@ -6,6 +6,6 @@ Cucumber_Gatorade 1 2 teaspoons ;
 Servo_Motors 18 20 torque ;
 Corn  1 2.75689 cups ;
 Misato 22 69 waves  ;
-Century_egg 1 1 unit;
-Wood 1 64 planks;
+Century_egg 1 1 unit ;
+Wood 1 64 planks ;
 artichoke 2 60 cups ;
