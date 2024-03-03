@@ -5,3 +5,10 @@ Onion
 Cheese
 Sugar
 Noodle
+Salt
+pepper
+garlic
+bell_pepper
+worcestershire_sauce
+Green Onions
+tomato paste
